@@ -1,0 +1,30 @@
+{
+  "name": "vimgame",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite dev --port 3100",
+    "build": "vite build",
+    "start": "vite preview",
+    "check:lessons": "tsx scripts/check-lessons.ts",
+    "gen:icons": "tsx scripts/gen-icons.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@tanstack/react-router": "^1.170.46",
+    "@tanstack/react-start": "^1.169.4",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.3",
+    "@types/node": "^26.6.5",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.2",
+    "tailwindcss": "^4.3.3",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.5"
+  }
+}

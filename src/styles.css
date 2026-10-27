@@ -1,0 +1,275 @@
+@import 'tailwindcss';
+
+:root {
+  --bg: #f2f2f7;
+  --card: #ffffff;
+  --card-2: #f6f6f9;
+  --ink: #0b0b10;
+  --ink-2: #3a3a42;
+  --muted: #8a8a94;
+  --line: rgba(20, 20, 40, 0.07);
+  --blue: #2f7bf5;
+  --blue-soft: #e9f1fe;
+  --green: #5b8a1c;
+  --green-soft: #eef4e2;
+  --purple: #8458f0;
+  --purple-soft: #f1ecfe;
+  --teal: #2f8aa0;
+  --teal-soft: #e4f2f5;
+  --pink: #ef3f7c;
+  --pink-soft: #fde9f0;
+  --amber: #c27a06;
+  --amber-soft: #fdf2dc;
+  --wall: #e6e6ec;
+  --shadow: 0 1px 2px rgba(16, 24, 40, 0.04), 0 10px 30px -14px rgba(16, 24, 40, 0.1);
+  --shadow-lg: 0 2px 4px rgba(16, 24, 40, 0.04), 0 24px 48px -16px rgba(16, 24, 40, 0.18);
+  --glass: rgba(255, 255, 255, 0.72);
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0c0c0f;
+    --card: #17171c;
+    --card-2: #1f1f26;
+    --ink: #f4f4f6;
+    --ink-2: #c8c8d0;
+    --muted: #85858f;
+    --line: rgba(255, 255, 255, 0.07);
+    --blue: #5b9bff;
+    --blue-soft: rgba(91, 155, 255, 0.14);
+    --green: #9ccc4f;
+    --green-soft: rgba(156, 204, 79, 0.13);
+    --purple: #a98bff;
+    --purple-soft: rgba(169, 139, 255, 0.14);
+    --teal: #5cc0d6;
+    --teal-soft: rgba(92, 192, 214, 0.13);
+    --pink: #ff6b9b;
+    --pink-soft: rgba(255, 107, 155, 0.14);
+    --amber: #f4b13e;
+    --amber-soft: rgba(244, 177, 62, 0.14);
+    --wall: #2a2a33;
+    --shadow: 0 1px 0 rgba(255, 255, 255, 0.03) inset, 0 10px 30px -14px rgba(0, 0, 0, 0.6);
+    --shadow-lg: 0 24px 48px -16px rgba(0, 0, 0, 0.7);
+    --glass: rgba(28, 28, 34, 0.72);
+    color-scheme: dark;
+  }
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-card: var(--card);
+  --color-card-2: var(--card-2);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-blue: var(--blue);
+  --color-blue-soft: var(--blue-soft);
+  --color-green: var(--green);
+  --color-green-soft: var(--green-soft);
+  --color-purple: var(--purple);
+  --color-purple-soft: var(--purple-soft);
+  --color-teal: var(--teal);
+  --color-teal-soft: var(--teal-soft);
+  --color-pink: var(--pink);
+  --color-pink-soft: var(--pink-soft);
+  --color-amber: var(--amber);
+  --color-amber-soft: var(--amber-soft);
+  --color-wall: var(--wall);
+  --font-sans: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+  --shadow-card: var(--shadow);
+  --shadow-float: var(--shadow-lg);
+}
+
+html,
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 28px;
+  box-shadow: var(--shadow);
+}
+
+.label-mono {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  scrollbar-width: none;
+}
+
+@keyframes gem-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--green) 45%, transparent);
+  }
+  50% {
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--green) 0%, transparent);
+  }
+}
+.gem {
+  animation: gem-pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes pop-in {
+  0% {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.12);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+.pop-in {
+  animation: pop-in 420ms cubic-bezier(0.2, 0.9, 0.3, 1.2) both;
+}
+
+@keyframes rise {
+  from {
+    transform: translateY(8px);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+.rise {
+  animation: rise 360ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+@keyframes tick-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+.tick-draw {
+  stroke-dasharray: 1;
+  animation: tick-draw 380ms 200ms cubic-bezier(0.65, 0, 0.35, 1) both;
+}
+
+@keyframes tick-ring {
+  from {
+    transform: scale(1);
+    opacity: 0.55;
+  }
+  to {
+    transform: scale(1.7);
+    opacity: 0;
+  }
+}
+.tick-badge {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    0 8px 24px -6px color-mix(in srgb, var(--green) 60%, transparent);
+}
+.tick-badge::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 2px solid var(--green);
+  animation: tick-ring 700ms 180ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  pointer-events: none;
+}
+
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-4px);
+  }
+  75% {
+    transform: translateX(4px);
+  }
+}
+.shake {
+  animation: shake 220ms ease-in-out;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+.blink {
+  animation: blink 1.05s steps(1) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gem,
+  .pop-in,
+  .tick-draw,
+  .rise,
+  .shake,
+  .blink {
+    animation: none;
+  }
+  .tick-badge::after {
+    display: none;
+  }
+}
+
+@keyframes slide-in {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: none;
+  }
+}
+.slide-in {
+  animation: slide-in 260ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .slide-in {
+    animation: none;
+  }
+}
+
+.thin-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--muted) 35%, transparent) transparent;
+}
+.thin-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+.thin-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.thin-scroll::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--muted) 35%, transparent);
+  border-radius: 999px;
+}
+.thin-scroll:hover::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--muted) 60%, transparent);
+}
