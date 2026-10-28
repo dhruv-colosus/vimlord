@@ -23,6 +23,7 @@ export interface Challenge {
 }
 
 export interface KeyDoc {
+  /** Spaces separate alternatives; `<name>` is a blank to fill in, e.g. `d<motion>`. */
   keys: string
   desc: string
 }
@@ -76,8 +77,8 @@ export const lessons: Lesson[] = [
       },
     ],
     keys: [
-      { keys: 'i', desc: 'Insert before the cursor' },
-      { keys: 'Esc', desc: 'Return to Normal mode' },
+      { keys: 'i', desc: 'Start typing before the cursor' },
+      { keys: 'Esc', desc: 'Back to Normal mode' },
     ],
     challenges: [
       {
@@ -146,10 +147,10 @@ export const lessons: Lesson[] = [
       },
     ],
     keys: [
-      { keys: 'h', desc: 'Left' },
-      { keys: 'j', desc: 'Down' },
-      { keys: 'k', desc: 'Up' },
-      { keys: 'l', desc: 'Right' },
+      { keys: 'h', desc: 'Move left' },
+      { keys: 'j', desc: 'Move down' },
+      { keys: 'k', desc: 'Move up' },
+      { keys: 'l', desc: 'Move right' },
     ],
     challenges: [
       {
@@ -204,11 +205,11 @@ export const lessons: Lesson[] = [
       },
     ],
     keys: [
-      { keys: 'a', desc: 'Append after cursor' },
-      { keys: 'A', desc: 'Append at end of line' },
-      { keys: 'I', desc: 'Insert at line start' },
-      { keys: 'o', desc: 'Open line below' },
-      { keys: 'O', desc: 'Open line above' },
+      { keys: 'a', desc: 'Start typing after the cursor' },
+      { keys: 'A', desc: 'Start typing at end of line' },
+      { keys: 'I', desc: 'Start typing at start of line' },
+      { keys: 'o', desc: 'New line below, start typing' },
+      { keys: 'O', desc: 'New line above, start typing' },
     ],
     challenges: [
       {
@@ -273,8 +274,8 @@ export const lessons: Lesson[] = [
     keys: [
       { keys: 'w', desc: 'Next word start' },
       { keys: 'b', desc: 'Previous word start' },
-      { keys: 'e', desc: 'Word end' },
-      { keys: 'W B E', desc: 'Same, whitespace-separated' },
+      { keys: 'e', desc: 'Next word end' },
+      { keys: 'W B E', desc: 'Like w / b / e, but only spaces split words' },
     ],
     challenges: [
       {
@@ -340,11 +341,12 @@ export const lessons: Lesson[] = [
       },
     ],
     keys: [
-      { keys: '0', desc: 'Line start' },
-      { keys: '^', desc: 'First non-blank' },
-      { keys: '$', desc: 'Line end' },
-      { keys: 'gg', desc: 'First line' },
-      { keys: 'G', desc: 'Last line (or line N with a count)' },
+      { keys: '0', desc: 'Start of line' },
+      { keys: '^', desc: 'First non-space character' },
+      { keys: '$', desc: 'End of line' },
+      { keys: 'gg', desc: 'First line of the file' },
+      { keys: 'G', desc: 'Last line of the file' },
+      { keys: '<count>G', desc: 'Go to that line, e.g. 5G' },
     ],
     challenges: [
       {
@@ -403,10 +405,10 @@ export const lessons: Lesson[] = [
       },
     ],
     keys: [
-      { keys: 'f{c}', desc: 'Jump onto next c' },
-      { keys: 't{c}', desc: 'Jump to just before c' },
-      { keys: 'F T', desc: 'Same, backwards' },
-      { keys: '; ,', desc: 'Repeat / reverse' },
+      { keys: 'f<char>', desc: 'Jump onto the next char' },
+      { keys: 't<char>', desc: 'Jump to just before the next char' },
+      { keys: 'F<char> T<char>', desc: 'Like f / t, but backwards' },
+      { keys: '; ,', desc: 'Repeat last find / in reverse' },
     ],
     challenges: [
       {
@@ -451,7 +453,7 @@ export const lessons: Lesson[] = [
       },
     ],
     keys: [
-      { keys: '/text', desc: 'Search forward' },
+      { keys: '/<text>', desc: 'Search forward, then press Enter' },
       { keys: 'n', desc: 'Next match' },
       { keys: 'N', desc: 'Previous match' },
     ],
@@ -498,8 +500,8 @@ export const lessons: Lesson[] = [
       },
     ],
     keys: [
-      { keys: 'x', desc: 'Delete character' },
-      { keys: 'dd', desc: 'Delete line' },
+      { keys: 'x', desc: 'Delete character under cursor' },
+      { keys: 'dd', desc: 'Delete the whole line' },
       { keys: 'D', desc: 'Delete to end of line' },
     ],
     challenges: [
@@ -564,7 +566,7 @@ export const lessons: Lesson[] = [
     keys: [
       { keys: 'u', desc: 'Undo' },
       { keys: 'Ctrl-r', desc: 'Redo' },
-      { keys: '.', desc: 'Repeat last change' },
+      { keys: '.', desc: 'Repeat the last change' },
     ],
     challenges: [
       {
@@ -622,9 +624,9 @@ export const lessons: Lesson[] = [
       },
     ],
     keys: [
-      { keys: 'd{motion}', desc: 'Delete' },
-      { keys: 'c{motion}', desc: 'Change (delete + insert)' },
-      { keys: 'cc', desc: 'Change whole line' },
+      { keys: 'd<motion>', desc: 'Delete what the motion covers, e.g. dw' },
+      { keys: 'c<motion>', desc: 'Delete it, then start typing, e.g. cw' },
+      { keys: 'cc', desc: 'Retype the whole line' },
     ],
     challenges: [
       {
@@ -687,10 +689,10 @@ export const lessons: Lesson[] = [
       },
     ],
     keys: [
-      { keys: 'yy', desc: 'Yank line' },
-      { keys: 'y{motion}', desc: 'Yank motion' },
-      { keys: 'p', desc: 'Put after' },
-      { keys: 'P', desc: 'Put before' },
+      { keys: 'yy', desc: 'Copy (yank) the whole line' },
+      { keys: 'y<motion>', desc: 'Copy what the motion covers, e.g. yw' },
+      { keys: 'p', desc: 'Paste (put) after the cursor' },
+      { keys: 'P', desc: 'Paste (put) before the cursor' },
     ],
     challenges: [
       {
@@ -744,9 +746,9 @@ export const lessons: Lesson[] = [
       },
     ],
     keys: [
-      { keys: 'r{c}', desc: 'Replace character' },
-      { keys: '~', desc: 'Toggle case' },
-      { keys: 'J', desc: 'Join lines' },
+      { keys: 'r<char>', desc: 'Replace character under cursor' },
+      { keys: '~', desc: 'Flip upper/lower case' },
+      { keys: 'J', desc: 'Join next line onto this one' },
     ],
     challenges: [
       {
@@ -792,10 +794,10 @@ export const lessons: Lesson[] = [
       },
     ],
     keys: [
-      { keys: 'iw aw', desc: 'Inner / around word' },
-      { keys: 'i" a"', desc: 'Inside / around quotes' },
-      { keys: 'i( a(', desc: 'Inside / around parens' },
-      { keys: 'i{ a{', desc: 'Inside / around braces' },
+      { keys: 'iw aw', desc: 'Inside / around a word, e.g. ciw' },
+      { keys: 'i" a"', desc: 'Inside / around "quotes"' },
+      { keys: 'i( a(', desc: 'Inside / around (parens)' },
+      { keys: 'i{ a{', desc: 'Inside / around {braces}' },
     ],
     challenges: [
       {
@@ -857,9 +859,9 @@ export const lessons: Lesson[] = [
       },
     ],
     keys: [
-      { keys: 'v', desc: 'Visual (characters)' },
-      { keys: 'V', desc: 'Visual (lines)' },
-      { keys: 'o', desc: 'Jump to other end' },
+      { keys: 'v', desc: 'Select characters' },
+      { keys: 'V', desc: 'Select whole lines' },
+      { keys: 'o', desc: 'Jump to other end of selection' },
     ],
     challenges: [
       {

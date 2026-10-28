@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { Icon } from '../components/icons'
 import { Header } from '../components/Chrome'
-import { IconBubble, Kbd, LessonIcon, SectionHeading, tints } from '../components/ui'
+import { IconBubble, KeyCombo, LessonIcon, SectionHeading, tints } from '../components/ui'
 import { chapters, lessons } from '../lib/lessons'
 import { useProgress } from '../lib/progress'
 
@@ -76,11 +76,7 @@ function Keys() {
                       <ul className="mt-4 flex flex-col divide-y divide-line">
                         {keys.map((k) => (
                           <li key={k.keys} className="flex items-center justify-between gap-4 py-2.5">
-                            <span className="flex flex-wrap gap-1">
-                              {k.keys.split(' ').map((part) => (
-                                <Kbd key={part}>{part}</Kbd>
-                              ))}
-                            </span>
+                            <KeyCombo keys={k.keys} />
                             <span className="text-right text-[14px] text-muted">{k.desc}</span>
                           </li>
                         ))}

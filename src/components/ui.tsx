@@ -60,18 +60,63 @@ export function Chip({
   )
 }
 
-export function Kbd({ children, size = 'md' }: { children: ReactNode; size?: 'sm' | 'md' | 'lg' }) {
-  const s = {
-    sm: 'min-w-[1.6em] px-1.5 text-[11px] h-[1.9em]',
-    md: 'min-w-[1.75em] px-1.5 text-[0.82em] h-[1.75em]',
-    lg: 'min-w-10 px-2.5 text-base h-10 rounded-xl',
-  }[size]
+type KbdSize = 'sm' | 'md' | 'lg'
+
+const kbdSizes: Record<KbdSize, string> = {
+  sm: 'min-w-[1.6em] px-1.5 text-[11px] h-[1.9em]',
+  md: 'min-w-[1.75em] px-1.5 text-[0.82em] h-[1.75em]',
+  lg: 'min-w-10 px-2.5 text-base h-10 rounded-xl',
+}
+
+export function Kbd({ children, size = 'md' }: { children: ReactNode; size?: KbdSize }) {
   return (
     <kbd
-      className={`${s} inline-flex items-center justify-center rounded-lg border border-line bg-card font-mono font-semibold text-ink shadow-[0_1.5px_0_var(--line)] align-[0.08em]`}
+      className={`${kbdSizes[size]} inline-flex items-center justify-center rounded-lg border border-line bg-card font-mono font-semibold text-ink shadow-[0_1.5px_0_var(--line)] align-[0.08em]`}
     >
       {children}
     </kbd>
+  )
+}
+
+/** A blank you fill in yourself, like the motion after `d`. */
+function KeySlot({ name, size }: { name: string; size: KbdSize }) {
+  return (
+    <span
+      className={`${kbdSizes[size]} inline-flex items-center justify-center rounded-lg border border-dashed border-muted/60 font-medium italic text-muted align-[0.08em]`}
+    >
+      {name}
+    </span>
+  )
+}
+
+/**
+ * Renders a key-reference label. Spaces separate alternatives (`W B E`
+ * shows as W / B / E) and `<name>` is a slot for the player to fill in
+ * (`d<motion>`, `f<char>`).
+ */
+export function KeyCombo({ keys, size = 'md' }: { keys: string; size?: KbdSize }) {
+  return (
+    <span className="inline-flex flex-wrap items-center gap-1">
+      {keys.split(' ').map((alt, i) => (
+        <Fragment key={alt}>
+          {i > 0 && <span className="text-[0.8em] text-muted">/</span>}
+          <span className="inline-flex items-center gap-0.5">
+            {alt
+              .split(/(<[a-z]+>)/)
+              .filter(Boolean)
+              .map((p, j) =>
+                p.startsWith('<') && p.length > 2 ? (
+                  <KeySlot key={j} name={p.slice(1, -1)} size={size} />
+                ) : (
+                  <Kbd key={j} size={size}>
+                    {p}
+                  </Kbd>
+                ),
+              )}
+          </span>
+        </Fragment>
+      ))}
+    </span>
   )
 }
 

@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from 'react'
 import { Link, useRouterState } from '@tanstack/react-router'
 import { Icon, type IconName } from './icons'
-import { Kbd, ProgressBar, tints } from './ui'
+import { KeyCombo, ProgressBar, tints } from './ui'
 import { chapters, lessons } from '../lib/lessons'
 import { lessonStars, levelInfo, liveStreak, useProgress } from '../lib/progress'
 
@@ -198,12 +198,10 @@ function Sidebar() {
                         <dl className="mt-3 grid grid-cols-[auto_minmax(0,1fr)] items-center gap-x-3 gap-y-2">
                           {l.keys.map((k) => (
                             <div key={k.keys} className="contents">
-                              <dt className="flex flex-wrap gap-1 text-[17px]">
-                                {k.keys.split(' ').map((part) => (
-                                  <Kbd key={part}>{part}</Kbd>
-                                ))}
+                              <dt className="text-[17px]">
+                                <KeyCombo keys={k.keys} />
                               </dt>
-                              <dd className="truncate text-[14px] text-ink-2">{k.desc}</dd>
+                              <dd className="text-[14px] leading-snug text-pretty text-ink-2">{k.desc}</dd>
                             </div>
                           ))}
                         </dl>

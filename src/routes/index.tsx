@@ -5,7 +5,7 @@ import { Header } from '../components/Chrome'
 import {
   Chip,
   IconBubble,
-  Kbd,
+  KeyCombo,
   LessonIcon,
   ProgressBar,
   SectionHeading,
@@ -208,9 +208,7 @@ function UpNext({ lessonId, p }: { lessonId: string; p: Progress }) {
           </p>
           <div className="mt-3 flex flex-wrap gap-1.5">
             {l.keys.map((k) => (
-              <Kbd key={k.keys} size="sm">
-                {k.keys}
-              </Kbd>
+              <KeyCombo key={k.keys} keys={k.keys} size="sm" />
             ))}
           </div>
         </div>
@@ -338,9 +336,7 @@ function LessonCard({ lessonId, p, upNext }: { lessonId: string; p: Progress; up
         <p className="mt-1 text-[15px] text-muted">{l.tagline}</p>
         <div className="mt-4 flex flex-wrap gap-1.5">
           {l.keys.slice(0, 5).map((k) => (
-            <Kbd key={k.keys} size="sm">
-              {k.keys}
-            </Kbd>
+            <KeyCombo key={k.keys} keys={k.keys} size="sm" />
           ))}
         </div>
         <div className="mt-auto flex items-center justify-between pt-6">
