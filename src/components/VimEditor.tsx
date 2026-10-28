@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import { keyLabel, lineEnd, lineStart, rowCol, type Mode } from '../lib/vim/engine'
 import type { RunState } from '../lib/challenge'
+import { Icon } from './icons'
 
 const modeStyle: Record<Mode, { label: string; cls: string; cursor: string }> = {
   normal: { label: 'Normal', cls: 'bg-blue-soft text-blue', cursor: 'bg-blue' },
@@ -25,11 +26,12 @@ export function ModeBadge({ mode }: { mode: Mode }) {
 export function VimEditor({
   run,
   walls,
-  overlay,
+  solved,
 }: {
   run: RunState
   walls?: string
-  overlay?: ReactNode
+  /** Celebrates in place: the final text stays fully visible. */
+  solved?: boolean
 }) {
   const { vim, targets, collected } = run
   const t = vim.text
@@ -51,7 +53,7 @@ export function VimEditor({
     for (let i = t.indexOf(vim.query); i !== -1; i = t.indexOf(vim.query, i + 1))
       for (let k = 0; k < vim.query.length; k++) matches.add(i + k)
   }
-  const style = modeStyle[vim.mode]
+  const style = solved ? modeStyle.insert : modeStyle[vim.mode]
   const barCursor = vim.mode === 'insert'
 
   let offset = 0
@@ -85,7 +87,7 @@ export function VimEditor({
       cells.push(
         <span key={col} className={cls}>
           {isCursor && barCursor && (
-            <span className={`${style.cursor} blink absolute -left-px top-[0.12em] bottom-[0.12em] w-[2px] rounded-full`} />
+            <span className={`${style.cursor} ${solved ? '' : 'blink'} absolute -left-px top-[0.12em] bottom-[0.12em] w-[2px] rounded-full`} />
           )}
           {content}
         </span>,
@@ -93,7 +95,11 @@ export function VimEditor({
     }
     const active = row === cur.row
     return (
-      <div key={row} className={`flex ${active ? 'bg-card-2' : ''} rounded-lg`}>
+      <div
+        key={row}
+        className={`flex ${active ? 'bg-card-2' : ''} ${solved ? 'solved-line' : ''} rounded-lg`}
+        style={solved ? { animationDelay: `${row * 55}ms` } : undefined}
+      >
         <span
           className={`w-10 shrink-0 select-none pr-4 text-right tabular ${active ? 'text-ink' : 'text-muted/70'}`}
         >
@@ -105,7 +111,7 @@ export function VimEditor({
   })
 
   return (
-    <div className="card relative overflow-hidden">
+    <div className={`card relative overflow-hidden ${solved ? 'editor-solved' : ''}`}>
       <div className="min-h-44 overflow-x-auto px-3 py-5 sm:px-5">
         <div className="min-w-max font-mono text-[15px] leading-[1.85] sm:text-[17px]">{rows}</div>
       </div>
@@ -121,11 +127,16 @@ export function VimEditor({
         ) : vim.message ? (
           <span className="truncate text-muted">{vim.message}</span>
         ) : null}
-        <span className="ml-auto font-mono text-muted tabular">
+        {solved && (
+          <span className="pop-in ml-auto inline-flex items-center gap-1 font-medium text-green">
+            <Icon name="check" size={14} /> Solved
+          </span>
+        )}
+        <span className={`${solved ? '' : 'ml-auto'} font-mono text-muted tabular`}>
           {cur.row + 1}:{cur.col + 1}
         </span>
       </div>
-      {overlay}
+      {solved && <span className="solved-sweep" aria-hidden />}
     </div>
   )
 }

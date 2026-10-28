@@ -106,45 +106,9 @@ export function ChallengeRunner({ challenge, eyebrow, onSolved, onContinue, cont
   }
 
   const liveStars = starsFor(run.keystrokes, p)
-  const recent = run.history.slice(-16)
-
-  const overlay = result && !compact && (
-    <div className="absolute inset-0 grid place-items-center bg-card/85 p-4 backdrop-blur-md">
-      <div className="rise flex flex-col items-center gap-3 text-center">
-        <div className="flex items-center gap-4">
-          <span className="tick-badge pop-in relative grid size-16 shrink-0 place-items-center rounded-full bg-green text-white">
-            <svg viewBox="0 0 24 24" width={36} height={36} fill="none" aria-hidden>
-              <path className="tick-draw" d="M5.1 13.25l3.95 3.5 9.85-10.05" pathLength={1} stroke="currentColor" strokeWidth={3.4} strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </span>
-          <div className="flex flex-col items-start gap-1">
-            <h3 className="text-[22px] font-semibold leading-tight tracking-tight">
-              {result.stars === 3 ? 'Flawless' : result.stars === 2 ? 'Nice work' : 'Solved'}
-            </h3>
-            <span className="pop-in" style={{ animationDelay: '120ms' }}>
-              <Stars value={result.stars} size={20} />
-            </span>
-          </div>
-        </div>
-        <p className="flex flex-wrap items-center justify-center gap-2 text-[14px] text-muted">
-          {result.keystrokes} keystrokes · par {result.par}
-          {result.xp > 0 && (
-            <Chip tint="blue" icon={<Icon name="zap" size={10} />} className="text-[14px]">
-              +{result.xp} XP
-            </Chip>
-          )}
-        </p>
-        <button
-          type="button"
-          onClick={onContinue}
-          className="mt-1 inline-flex items-center gap-2 rounded-full bg-ink px-6 py-3 text-[15px] font-semibold text-bg transition hover:opacity-90 active:scale-[0.98]"
-        >
-          {continueLabel} <Icon name="arrow-right" size={16} />
-          <span className="ml-1 rounded-md bg-bg/15 px-1.5 py-0.5 font-mono text-xs">⏎</span>
-        </button>
-      </div>
-    </div>
-  )
+  // Once solved, show the whole solution so it can be reviewed.
+  const recent = result ? run.history : run.history.slice(-16)
+  const showPanel = !!result && !compact
 
   return (
     <div className="flex flex-col gap-4">
@@ -173,13 +137,20 @@ export function ChallengeRunner({ challenge, eyebrow, onSolved, onContinue, cont
       </div>
 
       <div key={shakeKey} className={run.blocked ? 'shake' : ''}>
-        <VimEditor run={run} walls={challenge.walls} overlay={overlay} />
+        <VimEditor run={run} walls={challenge.walls} solved={run.solved} />
       </div>
 
-      <GoalStrip challenge={challenge} run={run} demo={demo} />
+      {showPanel ? (
+        <SolvedPanel result={result} continueLabel={continueLabel} onContinue={onContinue} />
+      ) : (
+        <GoalStrip challenge={challenge} run={run} demo={demo} />
+      )}
 
       <div className="flex flex-wrap items-center gap-3">
-        <div className="no-scrollbar flex min-h-10 flex-1 items-center gap-1.5 overflow-x-auto">
+        <div
+          className={`no-scrollbar flex min-h-10 flex-1 items-center gap-1.5 ${showPanel ? 'flex-wrap' : 'overflow-x-auto'}`}
+        >
+          {showPanel && <span className="label-mono mr-1.5 !text-[11px]">Your solution</span>}
           {recent.length === 0 ? (
             <span className="text-[14px] text-muted">{demo ? 'Watch closely…' : 'Your keystrokes show up here'}</span>
           ) : (
@@ -190,7 +161,7 @@ export function ChallengeRunner({ challenge, eyebrow, onSolved, onContinue, cont
             ))
           )}
         </div>
-        <div className="flex items-center gap-2">
+        <div className={`flex items-center gap-2 ${showPanel ? 'hidden' : ''}`}>
           {challenge.hint && !compact && (
             <ToolButton onClick={() => setHint((h) => !h)} icon={<Icon name="bulb" size={16} />}>
               Hint
@@ -206,6 +177,68 @@ export function ChallengeRunner({ challenge, eyebrow, onSolved, onContinue, cont
           </ToolButton>
         </div>
       </div>
+    </div>
+  )
+}
+
+/** Docks under the editor instead of covering it, so the final text stays readable. */
+function SolvedPanel({
+  result,
+  continueLabel,
+  onContinue,
+}: {
+  result: SolveResult & { xp: number }
+  continueLabel: string
+  onContinue: () => void
+}) {
+  const ref = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    ref.current?.scrollIntoView({ block: 'nearest', behavior: reduce ? 'auto' : 'smooth' })
+  }, [])
+  return (
+    <div
+      ref={ref}
+      className="solved-panel rise flex flex-col gap-4 rounded-2xl bg-card px-4 py-4 shadow-card sm:flex-row sm:items-center sm:px-5"
+      style={{ animationDelay: '180ms' }}
+    >
+      <div className="flex items-center gap-3.5">
+        <span className="tick-badge pop-in relative grid size-12 shrink-0 place-items-center rounded-full bg-green text-white">
+          <svg viewBox="0 0 24 24" width={26} height={26} fill="none" aria-hidden>
+            <path className="tick-draw" d="M5.1 13.25l3.95 3.5 9.85-10.05" pathLength={1} stroke="currentColor" strokeWidth={3.4} strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </span>
+        <div className="flex flex-col gap-0.5">
+          <span className="flex items-center gap-2.5">
+            <h3 className="text-[19px] font-semibold leading-tight tracking-tight">
+              {result.stars === 3 ? 'Flawless' : result.stars === 2 ? 'Nice work' : 'Solved'}
+            </h3>
+            <span className="pop-in" style={{ animationDelay: '320ms' }}>
+              <Stars value={result.stars} size={17} />
+            </span>
+          </span>
+          <span className="flex flex-wrap items-center gap-2 text-[14px] text-muted">
+            <span className="tabular">
+              {result.keystrokes} keystrokes · par {result.par}
+            </span>
+            {result.xp > 0 && (
+              <span className="pop-in" style={{ animationDelay: '420ms' }}>
+                <Chip tint="blue" icon={<Icon name="zap" size={10} />}>
+                  +{result.xp} XP
+                </Chip>
+              </span>
+            )}
+          </span>
+        </div>
+      </div>
+      <button
+        type="button"
+        onClick={onContinue}
+        className="inline-flex items-center justify-center gap-2 rounded-full bg-ink px-5 py-2.5 text-[15px] font-semibold text-bg transition hover:opacity-90 active:scale-[0.98] sm:ml-auto"
+      >
+        {continueLabel} <Icon name="arrow-right" size={16} />
+        <span className="ml-1 rounded-md bg-bg/15 px-1.5 py-0.5 font-mono text-xs">⏎</span>
+      </button>
     </div>
   )
 }
